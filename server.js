@@ -9,28 +9,32 @@ const app = express();
 const port = 3000;
 
 app.use(cors());
-
 app.use(bodyParser.json());
 
 app.post("/send-email", async (req, res) => {
-  const { to, subject, text } = req.body;
+  const { name, email, message } = req.body;
 
   let transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: "gmail", // Usamos el servicio de Gmail
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: "", // El correo de Gmail
+      pass: "", // La contraseña de tu correo Gmail
     },
     tls: {
-      rejectUnauthorized: false,
+      rejectUnauthorized: false, // Permitir certificados no verificados
     },
   });
 
   let mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: to,
-    subject: subject,
-    text: text,
+    from: `<kronnersrl@gmail.com>`,
+    to: "hola@kronnerlogistica.com.ar",
+    subject: `Nuevo mensaje de ${name}`,
+    text: `Has recibido un nuevo mensaje de contacto.
+        Nombre: ${name}
+        Correo: ${email}
+        Mensaje: 
+        ${message}
+    `,
   };
 
   try {
